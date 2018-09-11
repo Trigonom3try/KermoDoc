@@ -1,0 +1,77 @@
+TEXTURE MAPPING
+
+--> Your ray finds a hit on a polygon, you know that it is within the polygon because it passed withinVertices
+
+--> The coordinates of the point you found are relative to the standard basis, but they can be expressed relative
+to the basis of the polygon in question using a Change of Basis from Linear Algebra *
+
+--> Let's take a step back :
+
+	B' = { v1, v2, v3 } 		--> B' is a set of vectors which is a basis in 3space
+
+	w = c1v1 + c2v2 + c3v3		--> w is any vector in B, and as such can be expressed as a linear 
+						combination of the vectors in B
+					--> c1,c2,c3 are scalar terms which are called the coordinates of w
+						relative to B
+	--> for the standard basis B = { (1,0,0) , (0,1,0) , (0,0,1) } for 3space, the scalar terms of the linear
+	combination do indeed become what we commonly refer to as coordinates, because they are all unit vectors :
+		(2,3,5) = 2(1,0,0,) + 3(0,1,0) + 5(0,0,1) 
+	
+	--> this becomes the case for vectors constructed from bases which are orthonormal, which means that each
+	vector in the basis, in addition to being orthogonal to all the others (which is the same as being linearly
+	independent which is interesting mathematically), is a unit vector or vector of magnitude 1. Thus,
+	the scalar terms can indeed be considered coordinates, in that they represent how many unitary distances
+	along each vector in the basis (for B, it's called an axis: X,Y,Z etc.) you have to proceed to get to the
+	components of the vector in question relative to that basis.
+	
+	--> all bases in the Kermo, including those for polygons and the camera, are orthonormal by convention
+
+
+--> You have the coordinates of the intersection point :
+		p = [ p1 p2 p3 ]
+
+	w = p1(1,0,0) + p2(0,1,0) + p3(0,0,1)	=   c1v1 + c2v2 + c3v3	--> v1,2,3 are vectors in the nonstandard
+									basis of the polygon
+
+	(p1,p2,p3) = c1v1 + c2v2 + c3v3
+
+	[ v11 v21 v31	[ c1		=	[ p1
+	  v12 v22 v32     c2			  p2
+	  v13 v23 v33 ]   c3 ]			  p3 ]
+
+		--> the elements of the v and p matrix are known, but not the c matrix
+		--> this yields the system :
+
+			v11c1 + v21c2 + v31c3 = p1
+			v12c1 + v22c2 + v31c3 = p2
+			v13c1 + v23c2 + v33c3 = p3
+
+	B'[c] = B''[x]		--> this simplifies to [c] = B'[x] if for the standard basis B, because B put into
+				the columns of a matrix produces the identity matrix I
+
+	B'^-1B'[c] = B'^-1B''[x]		B''^-1B'[c] = B''^-1B''[x]
+	[c] = B'^-1B''[x] 			B''^-1B'[c] = [x]	
+
+			--> depending on whether x or c is unknown
+
+--> So we have :
+
+	B'[c] = [p]
+	B'^-1B'[c] = B'^-1[p]
+	
+	[c] = B'^-1[p]	--> this system is solved. The terms in p are known constants instead of variables, and if
+				we know how to find the inverse of a matrix then we know the terms in B'^-1 ;
+				performing the multiplication will yield a 3x1 matrix (since p is 3x1) of constants
+			--> equate the 3x1 matrix of unknown variables in c with the 3x1 matrix of known constants
+			in p, that's it you have a value for each variable.
+	
+
+	--> thus you would obtain the coordinates of the intersection point relative to the polygon basis, which is
+	the same as the texture basis ; what next?
+
+	--> (coordinate * texture.scaleFactor) % texture.width = index of colorpoint
+	
+	
+	
+
+	

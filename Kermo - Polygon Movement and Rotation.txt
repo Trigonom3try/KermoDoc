@@ -1,0 +1,19 @@
+
+-Polygons can be rotated about the axes, about the camera's basis, or about their own bases
+	--> polygons need bases in order for texture mapping to be accomplished
+
+-there can be a button panel for rotating polygons about the axes, and another button panel
+	for rotating polygons about their own bases
+	--> click and drag can be used for rotation about the camera's basis *
+
+ 
+-Rotation of polygons :
+	--> construct vectors from the origin of the polygon to each of the vertices
+	--> rotate each vector around the axis, one of the camera basis vectors, or one of the polygon basis vectors
+	--> rotate each of the vectors in the basis of the polygon around the rotation vector as well
+	--> take the components of each of the vectors created from the vertices, convert to int, add the coordinates
+		of the origin *, and use to create new vertices
+
+-Movement of polygons :
+	--> to translate a polygon by a certain amount along a given axis, simply add that number to the coordinate
+		corresponding to the axis in question for each vertex of the polygon including the origin

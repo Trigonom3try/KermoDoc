@@ -1,0 +1,122 @@
+INTERSECTION OF A LINE AND A PLANE
+
+		Part I - The Proof
+Line :
+	l = l0 + tv
+	
+	--> where l is a position vector to any point on the line
+	--> l0 is a position vector to a known point on the line
+	--> v is a direction vector parallel to the line i.e. the 3d slope of the line, and t is a scalar
+
+Plane :
+	n * (p - p0) = 0
+
+	--> where n is a vector that is orthogonal i.e. perpendicular to the plane
+	--> p is a position vector to any point on the plane
+	--> p0 is a position vector to a known point on the plane
+	--> p - p0 is the difference vector and lies on the plane
+	--> the dot product (represented by * as opposed to X) of the normal vector n and the difference vector
+		p - p0 is 0 because the two vectors are perpendicular, and cos(90) = 0
+	--> Thus :
+
+	n * p = n * p0
+
+The Intersection :
+
+	l = l0 + tv		
+	n * (l - p0) = 0	--> plug in l to the equation for the plane		
+	n*l - n*p = 0		--> property of the dot product
+	n*l0 + n*tv = n*p0
+	t(n*v) = n*p0 - n*l0	    --> property of the dot product
+
+	t =   n*p0 - n*l0  / n*v   --> n*v cannot equal zero
+
+--> plugging t back into the line equation :
+
+	position vector to intersection   =   l0 + tv	
+
+
+
+Expanded Proof :
+
+n * (l - p0) = 0
+n * ((l0 + tv) - p0) = 0
+n * (<l01+tv1, l02+tv2, l03+tv3> - <p01,p02,p03>) = 0		--> I use angle brackets as position vector notation
+<n1,n2,n3> * <l01+tv1-p01, l02+tv2-p02, l03+tv3-p03> = 0
+
+n1(l01+tv1-p01) + n2(l02+tv2-p02) + n3(l03+tv3-p03)  = 0
+
+n1*l01 + n1*tv1 - n1*p01 + n2*l02 + n2*tv2 - n2*p02 + n3*l03 + n3*tv3 - n3*p03 	= 0
+
+n1*l01 + n2*l02 + n3*l03 - n1*p01 - n2*p02 - n3*p03 + n1*tv1 + n2*tv2 + n3*tv3 = 0
+
+n1*l01 + n2*l02 + n3*l03 - (n1*p01 + n2*p02 + n3*p03) + t(n1*v1 + n2*v2 + n3*v3) = 0
+
+(n*l0) - (n*p0) = -t(n * v)
+
+
+	t	=	n*p0 - n*l0  /  n*v
+
+
+
+
+		Part II - The Code
+
+public static Point findIntersection(Ray r, Triangle tri)	// it is convenient to use a Ray class because they have an origin and a slope
+    {
+
+        Vector p0 = new Vector(tri.P0);     // this is a position vector to a known point on the plane, one of the Triangle's vertices
+        Vector r0 = new Vector(r.origin);   // position vector to a known point on the line, we use the origin of the Ray
+        
+        double numerator = Vector.dotProduct(tri.Znormal, p0) - Vector.dotProduct(tri.Znormal, r0);	// the numerator of t from the proof
+        double denominator = Vector.dotProduct(tri.Znormal, r.slope);
+        
+        if (denominator == 0) return null;      	// returning a null point means that no intersection was found
+
+	     /* 	For the denominator of the t term to be 0, means that the dot
+             product of the normal of the polygon and the 3d slope of the line is 0; the dot product of two vectors is a scalar
+             quantity equal to the product of the vectors' magnitudes times the cosine of the angle between them; given that neither
+             vector is a zero vector i.e. both have magnitudes != 0, for the dot product to be 0 means that the cos of the angle 
+             between them must be 0, and the cosine, being adjacent over hypotenuse, is only equal to 0 for the  angles 90 and -90
+             degrees, i.e. right angles.  Thus, for the cosine of the angle between two vectors to be 0, those vectors must be
+             orthogonal (perpendicular); given that the normal of a plane is a vector that is aready orthogonal to all vectors 
+             contained on the plane, a vector orthogonal to the normal of a plane is necessarily parallel to the plane (orthogonal
+             to the orthogonal, 90 + 90 = 180). Thus, the line lies either completely inside the plane (infinite intersections),  
+             or does not intersect with the plane at all.
+        
+             Many graphics engines, including this one, handle both cases in exactly the same way: by not returning
+             the color of the polygon in question, which primarily saves the computer from having to divide by 0, and from doing 
+             complicated checks in the case that the line lies within the plane and you still want that polygon's color.
+            
+             This is why, in video games, when you clip through a texture like say a wall,
+             and look down the side of the texture from just the correct angle, it seems to disappear, like a sheet of paper with
+             no width; because the ray from the camera is parallel to the polygon, running straight through it.
+            
+             I had been curious about that since I was a kid; and, like a lot of parts of this program, I figured it out on my own.    
+		*/
+
+            
+        double t = numerator / denominator;     // the scalar term by which we shall extend the slope vector of the ray up to the point
+                                                // of intersection with the plane
+        
+        if (t < 0) return null;  
+      
+               /*   This single short line of code is actually quite significant. It means
+                that colors of polygons that are behind the camera will not be returned. 
+                Multiplying the 3d slope of the line by a negative scalar means that the slope vector
+                will change directions, becoming antiparallel to what it was. The resultant vector
+                from adding this vector to the position vector to the line's orgin, will run in the 
+                opposite direction to the slope with which the ray was defined during the camera's 
+                intitialization or update. This is of course not allowed for rays, which have limits at their point of origin.
+                If T were between 0 and 1, it would just make the slope vector shorter but still point in the same direction.  
+
+		See : Kermo_DEP - The Ray Problem.txt, my initial formulation of the problem that this beautiful little line solves   
+                */          
+        
+        Vector v = Vector.scalarMultiple(r.slope, T);  		// we scale the slope of the ray such that it is extended to the point of intersection
+        Point intersection = new Point( Vector.sum(r0, v) );    // we add the scaled slope vector to the position vector to the ray's origin, and the resultant
+								// is a position vector whose components, converted to int, are the coordinates of the intersection
+                                            
+        return intersection;       // the point returned by findIntersection, if it is not null, is subsequently checked in other methods like withinVertices
+    }
+

@@ -1,0 +1,105 @@
+SIMPLE VECTOR ROTATIONS WITH MATRICES - NO ANGLES OR PROJECTIONS
+
+		Intro - Rotation Matrices
+
+--> you multiply the coordinate matrix [x] = [ X    ,  which is a vector, by the following matrix, called a Rotation Matrix :
+				               Y ]
+
+	[	cos(theta)	-sin(theta)
+		sin(theta)	cos(theta)	]
+
+	This has the effect of rotating the vector counter-clockwise by the angle theta.
+
+--> Rotation Matrices are a linear transformation. Their effect is proven from the polar coordinate system, matrix algebra, and the 
+	trigonometric identities. I will not go into their proof here
+
+
+--> the magnitude of the vector does not change (mathematically at least) in any case
+
+
+
+		Part I - Changing the Components
+
+Rotation in XY (about Z) :
+
+-Zcomp doesn't change
+
+Xcomp = Xcomp*cos(theta) - Ycomp*sin(theta)	--> this a matrix multiplication
+Ycomp = Xcomp*sin(theta) + Ycomp*cos(theta)	--> same logic for 2D as 3D, because in 3D rotation about one axis means that
+							the coordinate for that axis will never change, so you don't have to worry
+							about it
+
+Rotation in XZ (about Y) :
+
+-Ycomp doesn't change
+
+Xcomp = Xcomp*cos(theta) - Zcomp*sin(theta)
+Zcomp = Xcomp*sin(theta) + Zcomp*cos(theta)
+
+
+Rotation in ZY (about X) :
+
+-Xcomp doesn't change
+
+Zcomp = Zcomp*cos(theta) - Ycomp*sin(theta)
+Ycomp = Zcomp*sin(theta) + Ycomp*cos(theta)
+
+
+
+
+
+	Part III - Readjusting for Correct Magnitude
+
+Because of floating point imprecision, when I first implemented the above algorithms, I successfully rotated the vectors, but
+the magnitude would change with each rotation; in one version with double-int conversions, it decreased greatly with each
+rotation such that after about 720 degrees it would be half its size, and even without those unnecessary conversions it would
+gain magnitude, slowly but surely at a rate of perhaps .000000001 per several rotations (which is still plenty, considering
+that I would ultimately need my vectors to endure potentially infinite rotations). 
+
+The solution to this problem is to manually adjust the components of the vector as follows :
+
+double newMag = distance(Xcomp, Ycomp, Zcomp) 		// this is the current actual magnitude of the rotated vector
+
+Xcomp = Xcomp * (magnitude/newMag)		// magnitude variable has not changed from the algorithm
+Ycomp = Ycomp * (magnitude/newMag)
+Zcomp = Zcomp * (magnitude/newMag)
+
+--> this yields a vector in the same direction as the rotated vector, but with a magnitude that is equal to what it should be,
+which is the magnitude before the rotation. (Proven below)
+
+
+
+	Part IV - Scaling a Vector
+
+Scaling a vector is a method by which a vector is lengthened or scaled by a real number factor called a scalar :
+
+		u = tv		--> where v is a vector, t is a scalar, and u is a vector in the direction of v but with 
+					magnitude t times |v| (notation for the magnitude of a vector, in a sense understandable
+								as the absolute value of that vector)
+
+Scalar multiplication for vectors is defined as follows :
+	v = ( v1, v2, ... vn )		--> where v1, v2, ... vn are the components of the vector in R^n
+	tv = ( tv1, tv2, ... vn )	--> t is a scalar
+
+Multiplying each of the components by a scalar has the effect of multiplying the length of the vector by that scalar :
+
+	v = ( v1, v2 )
+	tv = ( tv1, tv2 )
+
+	|v| = sqrt( v1^2 + v2^2 )
+        |tv| = sqrt( (tv1)^2 + (tv2)^2 )
+	     = sqrt( t^2 v1^2 + t^2 v2^2 )
+	     = sqrt( t^2 (v1^2 + v2^2) )
+	     = t sqrt( v1^2 + v2^2 )
+	
+	     = t |v|
+
+Suppose that m is the magnitude of v, and t is equal to n / m . The magnitude of u from above is then tm = (n/m) m = n
+	--> Scaling a vector by a scalar equal to n divided the vector's current magnitude, has the effect of changing the magnitude
+		of the vector to n
+
+Thus the logic in Part III above is the logic for changing the magnitude of a vector without changing its direction, implemented
+in the changeMagnitude(newMag) method.
+
+
+

@@ -1,0 +1,121 @@
+SIMPLE VECTOR ROTATIONS FROM TRIG
+
+--> I used to call this "The Angle Problem" 
+
+
+cos = adj / hyp
+hyp = adj / cos
+
+sin = opp / hyp
+hyp = opp / sin
+
+
+--> The magnitude of the vector doesn't change in any case
+
+
+Rotation in XY (Around Z) :
+
+-XYangle.add(theta)
+-Zcomp doesn't change
+-XYmag doesn't change
+
+Xcomp = XYmag * cos(XYangle)
+Ycomp = XYmag * sin(XYangle)		--> sine and cosine are never undefined *
+
+-Known : XYangle, XYmag, Xcomp, Ycomp, Zcomp
+-Unknown : XZangle, XZmag, ZYangle, ZYmag
+
+XZmag = Pyth(Xcomp, Zcomp)		--> using Pythagoras is better than using trig
+XZangle = arctan(Zcomp/Xcomp)
+	= acos(Xcomp/XZmag)
+	= asin(Zcomp/XZmag)		--> 3 different ways to compute the other 2 angles
+
+ZYmag = Pyth(Zcomp, Ycomp)
+ZYangle = arctan(Ycomp/Zcomp)
+	= acos(Zcomp/ZYmag)
+	= asin(Ycomp/ZYmag)
+
+
+
+Rotation in XZ (Around Y) :
+
+-XZangle.add(theta)
+-Ycomp doesn't change
+-XZmag doesn't change
+
+X = XZmag * cos(XZangle)
+Z = XZmag * sin(XZangle)
+
+Known : XZangle, XZmag, Xcomp, Ycomp, Zcomp
+Unknown : XYangle, XYmag, ZYangle, ZYmag
+
+XYmag = Pyth(Xcomp, Ycomp)
+XYangle = arctan(Xcomp/Ycomp)
+	= acos(Xcomp/XYmag)
+	= asin(Ycomp/XYmag) 
+
+ZYmag = Pyth(Zcomp, Ycomp)
+ZYangle = arctan(Ycomp/Zcomp)
+	= acos(Zcomp/ZYmag)
+	= asin(Ycomp/ZYmag)
+
+
+
+Rotation in ZY (Around X) :
+
+-ZYangle.add(theta)
+-Xcomp doesn't change
+-ZYmag doesn't change
+
+Zcomp = ZYmag * cos(ZYang)
+Ycomp = ZYmag * sin(ZYang)
+
+-Known : ZYangle, ZYmag, Xcomp, Ycomp, Zcomp
+-Unkown : XYangle, XYmag, XZang, XZmag
+
+XYmag = Pyth(Xcomp, Ycomp)
+XYangle = arctan(Ycomp/Xcomp)
+	= acos(Xcomp/XYmag)
+	= asin(Ycomp/XYmag)
+
+XZmag = Pyth(Xcomp, Ycomp)
+XZangle = arctan(Zcomp/Xcomp)
+	= acos(Xcomp/XZmag)
+	= asin(Zcomp/XZmag)
+
+
+
+
+
+
+
+
+void findComponentsFromTan()       // calculte new components from the direction and the magnitude, using tangent
+        {                           
+            double tanXYsqr = Math.tan(XYangle.angle) * Math.tan(XYangle.angle);
+            double tanXZsqr = Math.tan(XZangle.angle) * Math.tan(XZangle.angle);
+            Xcomponent =  Math.sqrt( (magnitude*magnitude) / (tanXYsqr + tanXZsqr) );
+            Ycomponent = Zcomponent * Math.tan(XYangle.angle);
+            Zcomponent = Xcomponent * Math.tan(XZangle.angle);  
+        }
+        void findMagnitudes()   // find the length across each plane
+        {
+            XYmag = Math.sqrt((Xcomponent*Xcomponent) + (Ycomponent*Ycomponent));   // using Pythagoras but could also use trig
+            XZmag = Math.sqrt((Xcomponent*Xcomponent) + (Zcomponent*Zcomponent));
+            ZYmag = Math.sqrt((Zcomponent*Zcomponent) + (Ycomponent*Ycomponent));
+        }
+        void findMagnitudesFromCos()
+        {
+            XYmag = Ycomponent / Math.cos(XYangle.angle);
+            XZmag = Zcomponent / Math.cos(XZangle.angle);
+            ZYmag = Ycomponent / Math.cos(ZYangle.angle);
+        }
+
+ 
+        void findMagnitudesFromSin()
+        {
+            XYmag = Xcomponent / Math.sin(XYangle.angle);
+            XZmag = Xcomponent / Math.sin(XZangle.angle);
+            ZYmag = Zcomponent / Math.sin(ZYangle.angle);
+        }
+

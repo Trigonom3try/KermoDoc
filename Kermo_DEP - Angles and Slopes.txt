@@ -1,0 +1,102 @@
+ANGLES AND SLOPES
+
+		Part I - Angles
+
+public class Angle
+    {
+        double angle;
+        
+        Angle(double a)
+        {
+            angle = a;
+            if (angle >= 360 || angle <= -360) angle = angle % 360;
+        }
+        void add(double d)
+        {
+            angle += d;
+            if (angle >= 360 || angle <= -360) angle = angle % 360;
+        }
+        
+        void multiply(double d)
+        {
+            angle = angle * d;
+            if (angle >= 360 || angle <= -360) angle = angle % 360;
+        }
+        void divide(double d)
+        {
+            angle /= d;
+            if (angle >= 360 || angle <= -360) angle = angle % 360;
+        }
+    }
+
+
+public class Transform 		// A relic from an ancient stage of Kermo's development. 
+				// What is called in Unity3D a "transform" for a model is fact a basis from linear algebra,
+				// and should consist of 3 vectors
+{
+    static double Vert_Angle;
+    static double Hor_Angle;
+    static double Lat_Angle;
+    
+    public Transform(double vert, double hor, double lat)
+    {
+        Vert_Angle = vert;
+        Hor_Angle = hor;
+        Lat_Angle = lat;
+    }
+}
+
+
+
+		Part II - Slopes
+
+public static double slopeFromAngle (Angle a)    // the slope is equivalent to the tangent of the angle of direction (important concept)
+					  	 // rise/run --> x/y --> opposite/adjacent
+    {                                        
+        if (a.angle == 90) return Double.POSITIVE_INFINITY;      
+        if (a.angle == -90) return Double.NEGATIVE_INFINITY;     
+
+		/*	 We need the above two lines because of floating point imprecision. Because the computer has a finite
+	 	number of bits to store any given number, and Pi is an irrational number of infinite decimal precision, the value 
+		of pi that the computer computes will not be exactly equal to pi, and as such converting any given angle value to 
+		radians will not yield a value that is exactly what it would be had you used the *real* pi; thus, the radians value
+	 	of a right angle will not be exactly what it otherwise would be; thus, the tangent of a right angle will not be
+                undefined or infinite, so you as the programmer have to add special checks to make sure that any further 
+		computations aren't messed up.
+                
+                 Yes I figured that out on my own, but I still have not figured out how to get NetBeans out of Radians mode >.>
+		*/
+
+        return Math.tan(toRadians(a.angle));    
+    }
+
+    static Angle angleFromSlope (double slope)
+    {
+        if (slope == Double.POSITIVE_INFINITY) return new Angle(90);
+        if (slope == Double.NEGATIVE_INFINITY) return new Angle(-90);
+        return new Angle(toRadians(Math.atan(slope)));   // Math.atan returns the arc tangent or inverse tangent of a real number
+    }
+
+--> The above code should illustrate why I gave up on trying to accommodate slopes into Kermo logic
+
+
+
+		Part III - Discussion
+
+I used to think that you needed angles, either the angles of the projections of a vector within each plane
+or the angles of the vector from each axis, to describe that vector's direction in space.  However, we know from trigonometry 
+that the ratios of the angles and the sides of every triangle are constant: the angles to the sides, the sides to the angles, and
+the angles to each other. This is why, if the size of at least one angle or the length of at least one side deviates from these 
+functions, the resulting figure cannot be called a triangle : angles would be too big or small, or the sides would be too long or 
+short, and the vertices would not connect or else would connect but the sides would overshoot and extend into the area around the 
+figure.
+  
+There is something that I can only describe as divine within this quintessentially simple, necessary, and intuitive truth. *
+
+As such, given that the sides and angles of a triangle are in constant ratio, you need only the lengths of the components of
+a vector to fully describe that vector's direction in space. 
+
+This is why many of the ideas in linear algebra are so powerful : they enable to work with vectors using only operations on
+the components of those vectors, such as addition, subtraction, etc.  For example, the dot product defined as the sum of each of 
+the components of two vectors multiplied together, as opposed to the product of their magnitudes multiplied by the cosine of
+the angle between them, is often much easier to work with, especially if you don't know the angle between the two vectors.

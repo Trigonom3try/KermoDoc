@@ -1,0 +1,212 @@
+ABOUT THE KERMO
+
+The Kermo is a complete software engine for faithfully rendering to the screen mostly geometric images in an R^3
+Cartesian space, from any given angle and orientation.
+In other words, it's a 3D graphics engine emulator, which I conceived and wrote entirely from scratch in Java. 
+The Kermo implements ray-tracing, texture mapping, lighting, animation, phyics, and game logic.
+
+1. SOME HISTORY (You can skip this part)
+
+
+I started writing code for the Kermo about 2 years ago, before I knew any Precalculus (which is to say, long after I'd forgotten 
+virtually all the math I learned in high school); also, for the record, I could have finished and gotten the app
+working without systematically studying any linear algebra, simply by translittering into code some of the math like
+the Rodriguez algorithm which I couldn't prove and simply had to pull from online, but I finished Ron Larson's 
+Elementary Linear Algebra 8th Edition in a couple of weeks anyway because I wanted to understand why things like rotation matrices 
+did what they were purported to do.
+ 
+In fact, it was very important to me throughout the project to prove as much as I could
+on my own, to study as little as possible, to not look at the book on graphics I had or look at the Quake engine in Visual
+Studio or at online graphics engines, or read about graphics on Wikipedia, or look at anything that any other programmer
+had written; but instead to get as much code working as possible from what little information that I already had 
+(I got simple rotations of vectors and triangles about the axes to work using only trigonometry, which I'm weirdly proud of;
+See VectorsLinesTriangles_TRIG.java, which is as far as I got before cracking down on linear algebra).
+
+I have not been affiliated with any school or professional program (I've also been homeless for the past 10 months).
+ 
+In that sense, the project is indeed a personal one, representing my own 2-year meditation and enquiry on how the 
+beautiful CGI you see in movies and video games and art is able to do what it does. ***NOTHING WHATSOEVER IS PLAGIARIZED ***
+
+Initially I barely studied. My main strategy for the first year was simply to play and watch more video games while thinking
+about graphics, and occasionally writing some code down for maybe an hour or 2 a week while working on other projects (and 
+getting high). I didn't even know about ray-tracing; I thought I'd be dealing with a frustrum and scaling color distances
+by the slopes of the frustrum's sides (all of which would have actually required much more, and more sophisticated, math than what
+I needed to learn in general, which of course ended up being a lot). But, somewhere down the line I learned what ray tracing was,
+and (again, without actually studying ray tracing algorithms) in the break room of the UPS warehouse I worked out pseudocode 
+for a basic ray-tracing algorithm and wrote EngineApp_EARLY_LOGIC.java, which is probably where the project began in earnest. 
+
+By then I had taken the time to systematically relearn precalculus and the derivative, learn a few physics fundamentals, 
+and read up to chapter 2 of Larson whereupon I knew about row-reducing a matrix to solve a linear system (this will become relevant 
+later); doing so either because I had arbitrarily forced myself to, thinking it was a necessary part of a computer science 
+and programming education, or from intuitions about the universal significance of what I was studying, or, in the case
+of for example learning about vectors in Physics for the first time, I just thought they were neat and fun in esoteric sorts of ways.
+
+Regardless, after doing so many mindless arithmetic problems in textbooks, I realized, and this became my
+attitude for most of the rest of the project, that math should be ancillary. You shouldn't have to worry about filling your head 
+with inapplicable theorems and equations if you're trying to do something specific, and you should only learn the equations
+that will be your tools and enable you to do what you're trying to do (given especially that all math works in fundamentally the
+same way through the same operation of addition/subtraction, and is all internally consistent; not to mention the Turing Machine, 
+syntax, etc.). For example, when I realized that you couldn't use matrix reduction to solve a system of 3 linear equations in 2 
+variables representing a line in 3 dimensions and 1 linear equation in 3 variables representing a plane (such a system is 
+overdetermined), I went online and learned about the vector forms of the line and the plane in 3d, concepts from 3rd semester 
+calculus even though my own calculus barely extended beyond the limit and the derivative, and was thereby able to find the 
+intersection logic for a line and a plane with relative ease. The same thing happened for the Law of Cosines (math which I never 
+thought I'd need) and the withinVertices logic for ray-polygon intersection (See : WithinVerticesTest.java); my point is that I'd 
+always try to reason through the 
+problems on my own, and if I realized that there was math I needed and didn't have (and didn't have time to prove or discover on my 
+own without starving to death while doing so; we really owe much to the sacrifice and back-breaking work done by generations of 
+mathematicians to flesh out these wonderful systems), then I'd go online or into books and learn it. 
+
+Also, you don't really need to worry about being fast at arithmetic since the only arithmetic you'll be doing will be 
+in the context of plugging things into your equations and finding results (which itself is often only in the context of debugging,
+since you ultimately want the computer to be doing all your tedious minute arithmetical computations once you give it the formulae).
+
+Let me just say that deciding to take the time to study linear algebra has truly opened my eyes. I was able to do away with the
+entire Angle class as well as cut away a lot of code from the vector class and the simple rotation methods and still have 
+rotations work beautifully. (See : Vector_Rotator_2D, one of the best classes I wrote for this project, really refined my methods
+and called attention to things like where double-int conversions should occur).
+Not only that, but such ideas as span and the basis for a vector space have really furthered my 
+understanding of 2 and 3 dimensional space, and to an extent, mathematics and life in general (because we live in 3-space). 
+
+Ironically, going into this project I hadn't realized that DOOM, the iconic, controversial first person shooter developed by id
+Software in 1993, is not actually a 3D game; that is, the environment itself may have a Z-dimension-like element corresponding to
+for example the height of walls and elevated surfaces, but the camera and the ways in which the player object is allowed to move
+and shoot correspond with a top-down, 2D shooter. I found this funny, because one of the huge motivators for my undertaking this
+massive project and learning all the math it has entailed was to create an FPS DOOM-clone (imitation is the sincerest form of
+flattery), but then I realized that I didn't actually need all the math I'd been learning to do that. Regardless, understanding just
+how easy creating a DOOM-clone would be given what I already knew, I started writing DOOM18.java, in addition to continuing work on 
+an actual 3D rendering system. (See : DOOM18 - About.txt , DOOM18.java)
+
+There's one last thing I'd like to touch upon before continuing my discussion of Kermo proper. 
+Late in the night of 8/17, I started rewriting both KermoEngine3D and DOOM18, separating everything into classes with public and 
+private methods and data, not having everything be static. I was able to 
+express much of what I'd learned theretofore by rewriting things like the Vector and Camera classes from memory, and refined my 
+methods and thinking by for example calling what I'd called "Sprites" and "Textures" instead "Images". 
+I also started thinking about some of the other things I'd need, like 
+Items and Guns and Animator objects, while putting many of my math methods into a Methods class and the GUI into Main.  
+I started
+to see how you can pull different discrete objects, each themselves tools and simple machines, together into a coherent software machine,
+working with each independently while also building up the whole interdependent system; what that feels like, how easy and exciting 
+that can be. 
+This marked the change from Stage 0 to Stage 1 of the development of Kermo and DOOM18 (hence the package names, KermoEvolution vs
+Kermo_dev_1 ) and perhaps the next level of my programming experience.
+
+I also began to really see from doing this that KermoEngine3D and DOOM18 are in many ways essentially the same app, with one 
+simply extended from R^2 to R^3, and each having a small set of provisions and quirks pertaining to the dimension of their 
+vector space. DOOM18 has some esoteric logic, particularly for how the camera emulates 3D in drawing the world to frame, that make it
+somewhat even more complex and less elegant of an app than the fully 3D rendering system.
+
+That the findIntersection logic for a line and a plane in 3D, and two lines in 2D, is in fact identical to the very 
+letter of code, served greatly to reinforce this understanding.
+
+Now: What I did start with, when I endeavored to start writing a graphics engine from scratch so long ago, aside from the Java I'd 
+learned from taking 2 introductory compsci courses at Harvard Extension (Dr. Henry Leitner), a belief in the beauty and power of 
+Video Games, and the vague prevailing notion that it was all so tantalizingly possible (even way back then, I knew that it was 
+possible), were 2 basic ideas ...
+
+
+
+2. THE FIRST IDEA : RASTER RENDERING
+
+“A pixel is not a little square!” —Alvy Ray Smith 
+
+The first idea was that of the raster-display, the rectangular array of tiny triplets of LED's called pixels. Each sub-pixel is
+tinted either red, blue, or green and emits a light the intensity of which is an analog of a signal received 
+from the controller of the monitor/phone/tv/watch/any device with an LED display, which signal is converted from a digitally-encoded 
+number. The device stores the 3 values for each pixel in memory, usually allotting 8 bits for each (Java in particular supports 
+8-bit color values, from 0-255 which is 2^8 or 256 possible values; 256^3 = 16.8 million possible color combinations), and each 
+24bit color number is stored in a rectangular array in memory, indexed corresponding to the X and Y position of the pixel to be 
+colored. Each number is then accessed sequencially within the array, sent across a bus to the pixel in question, and converted into 
+an analog voltage that is sent through the LED, burning the material within and causing energy to be released as light, thus 
+illuminating the pixel to a brightness that is an analog of the input voltage. I don't know many of the specifics of the process as 
+I'm not an electrical engineer or even really a hardware guy at all, but this is a generally accurate picture of what's going on. 
+
+Now that was a lot of words to describe a simple process, and I didn't necessarily know all of that starting out but I did 
+understand the following: the computer draws images by coloring pixels in a 2d array, from a 2d array of values in memory. *
+
+So, using arrays and the Java swing package, I overloaded the paintComponent method for a JPanel that would serve as a display
+(sort of like a tv screen or monitor emulator), in the following manner:
+
+
+	static Color [][] Frame = new Color[height][width]	    // the virtual image within memory
+
+	static class ViewPort extends JPanel
+	{
+		public void paintComponent(Graphics g)
+			for (int y = 0; y < height; ++y)     	    // a raster-renderer that proceeds along each pixel    
+                		for (int x = 0; x < width; ++x)     // up to down, left to right   
+                		{
+                    			g.setColor(Frame[y][x]);    // get the color of the virtual image at that position
+
+                    			g.drawRect(x, y, 1, 1);     // color each singular pixel by drawing a rectangle with
+								    // width and height 0 at each pixel location on the screen                        
+                		}
+	}
+
+See : Display.java
+
+I would end up using this quintessential solution for a lot of different 2D apps in Java.
+
+
+
+3. THE SECOND IDEA : CARTESIAN WORLD
+
+So, now that we know how the computer colors pixels, the essential problem of 3D graphics is formulated: how does the computer 
+obtain the color for each pixel? This is where my other idea comes into play. If you look at video games, the objects in a video
+game are numeric representations stored in memory, which occupy a 3-dimensional Cartesian coordinate space comprised of an array
+of discrete points or ordered tuples (also in memory), themselves comprised of three values corresponding to the X, Y and Z positions
+of the point in the space; in other words, I pictured the game world as a numeric box or grid, with objects in the box occupying 
+coordinates in it. Each point would have a color value assigned to it, just as objects in the world would have colors, and then the 
+camera would undergo a process for mathematically obtaining the colors of certain points within the world, and use those colors to 
+color the frame. From this I developed the following code (from a very early, deprecated version of the engine) :
+
+
+static class World		
+{
+	static Point [][][] Points = new Point[worldSize][worldSize][worldSize];     // the world would be a giant cube
+	World()
+	{
+		for (int z = 0; z < worldSize; ++z)
+			for (int y = 0; y < worldSize; ++y)
+				for (int x = 0; x < worldSize; ++x)
+					Points[z][y][z] = new Point(x,y,z);	
+							// where each Point is an object containing
+							// ints for its x, y, and z coordinates
+	}
+
+As you can see, I used a for-loop as a sort of raster-initializer for the World object, proceeding along each slot along the
+Z, Y, and X axes and populating the world with a Point at each position (fun fact: I used to be obsessed, like seriously obsessed
+with for-loops *). 
+So, what's wrong with the World class? Well, in order for the world to be big enough, which is to say have enough coordinate values
+within it to enable a high precision of computation and thus a highly detailed world, there needed to be on the order of 1000s,
+10s of thousands or more, points along each axis; in fact, I had initially planned for there to be 1million^3 points within the
+world. Let's do the math: each point object has as its data fields 3 integers for X,Y, and Z, and a Color value (not to mention
+potentially other fields such as for example a double value distanceFromOrigin representing the distance of the point from the 
+Camera origin, which would be a hugely important value to keep track of, or things like links to polygons if it were a vertex of
+a polygon; I ended up making a Vertex class that extended the Point class, but that was later). Each int has 4bytes, and each
+Color object has (at least) 3 bytes (for representing 3 integers from 0-255); that's 7 bytes per point, times 1000000000 (not cubed)
+= 7 gigabytes of RAM consumed to create the world (then you'd have to cube that).  Yeah, on a machine that has only 2gb of RAM
+(not to mention a whimpy 1.2ghz processor and only 20gb of storage with no gpu and not many other features to speak of; it's 
+probably the crappiest excuse for a notebook you could ever imagine using for anything, let alone trying to build a complete 
+3d graphics engine emulator or some of the other projects I've tried to build and run on it; although
+it never overheated in 90+ degree weather spending hours in a densely packed homeless backpack), you'd better believe I got a 
+"stack overflow" error message and had to reexamine my methods. 
+
+(Shit, that shit wouldn't run on the most tricked-out gaming pc, you'd need a supercomputer to run that)
+(Not that the pc I had to scrap before moving out of my parents house to become homeless when they sold it was tricked out by any
+ stretch of the imagination, but hey at least it ran Unity and Unreal; but I digress)
+
+Of course, the solution to this problem is that you don't actually need to have a world class with a bunch of points, most of which
+would be empty if they weren't coindexed to the polygons containing them. Instead, you can just have the polygons themselves, with
+values floating around in space for vertex coordinates and colors and orientations and the like; then, you can loop through them
+during rendering.
+
+		
+4. THE "VIEW FRUSTRUM"
+
+5. RAY-TRACING
+ 
+Now we come to what I believe to be a beautiful engineering solution, and one of the great ideas within computer science:
+Ray-Tracing.
+
+

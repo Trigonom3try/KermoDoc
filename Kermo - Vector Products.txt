@@ -1,0 +1,62 @@
+VECTOR PRODUCTS
+
+--> from Chapter 1 of University Physics with Modern Physics, 14th edition, Hugh D. Young and Roger E. Freedman
+
+
+Dot Product :
+
+	(Axi + Ayj + Azk) * (Bxi + Byj + Bzk)
+
+=	Axi*Bxi + Axi*Byj + Axi*Bzk +
+	Ayj*Bxi + Ayj*Byj + Ayj*Bzk +
+	Azk*Bxi + Azk*Byj + Azk*Bzk
+
+=	AxBx 	+    0    +    0    +
+        AyBy    +    0    +    0    +
+	AzBz    +    0    +    0    
+
+=	AxBx + AyBy + AzBz		--> the sum of the components of the two vectors multiplied together
+
+
+
+Cross Product :
+
+	(Axi + Ayj + Azk) x (Bxi + Byj + Bzk)
+
+=	AxixBxi + AxixByj + AxixBzk +
+	AyjxBxi + AyjxByj + AyjxBzk +
+	AzkxBxi + AzkxByj + AzkxBzk
+
+=	0       + AxixByj  + AxixBzk  +
+	AyjxBxi +    0     + AyjxBzk  +
+	AzkxBxi + AzkxByj  +    0
+
+=	(AxBy)(ixj)  +  (AxBz)(ixk)  +
+	(AyBx)(jxi)  +  (AyBz)(jxk)  +
+	(AzBx)(kxi)  +  (AzBy)(kxj)
+
+=	(AxBy)k  +  (AxBz)-j  +			--> see the table below
+	(AyBx)-k +  (AyBz)i  +
+	(AzBx)j  +  (AzBy)-i
+
+
+=	(AyBz - AzBy)i  +  (AzBx - AxBz)j  +  (AxBy - AyBx)k		
+
+
+
+
+UNIT VECTOR MULTIPLICATION TABLE
+
+i x i = j x j = k x k = 0  
+	because sin(0) = 0/1 = 0
+
+i x j = -j x i = k		-i x j = j x i = -k
+j x k = -k x j = i		-j x k = k x j = -i
+k x i = -i x k = j		-k x i = i x k = -j
+
+
+i * i = j * j = k * k = 1 
+	because cos(0) = 1/1 = 1
+
+i * j = 0 etc,
+	because cos(90) = 0/1 = 0

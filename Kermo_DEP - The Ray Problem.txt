@@ -1,0 +1,31 @@
+THE RAY PROBLEM
+
+-The central idea of this problem is about checking the equality of antiparallel vectors, i.e. vectors whose 
+direction difference is 180 degrees for each angle; such vectors would in traditional mathematical notation have
+opposite signs.
+
+-we want antiparallel vectors to not be equal, because in our code for line-plane intersection, we could get
+an intersection point that could be anywhere on a line, which is of infinite length in both directions; we want
+to make sure, before we return a color, that the intersection is along the direction of the ray, because rays have
+endpoints and there is nothing beyond the endpoint of the ray in the antiparallel direction
+
+-finding the intersection returns a Point (with x, y, z coordinates that are equal to the components
+	of the vector created from plugging t into the line equation)
+
+-then you create a new vector using the Vector(Point, Point) constructor, whose components are the deltas across
+	each axis from the origin on the ray to the newly returned intersection point
+
+		--> ** Vector (origin, intersection) **		
+			because in the code, it's Vector (p1, p2) where p2 - p1 *****
+			(the ordering of the arguments in parentheses doesn't matter, just so long as the 
+				logic is p2 - p1 **) 
+		--> compute the slopes/angles of this new vector upon creation
+
+-if the slope is 0 (0 component on the vertical axis) check the cosines of the slopes of the two vectors for 
+	equality (because the sine will be 0 for both of two antiparallel vectors with 0 slope); if the
+	horizontal component is 0, check the sines of the slopes for equality (because the cosine is undefined
+	at theta = 90 and -90 ) ; otherwise, it is possible to check either sine or cosine for a correct result *
+		--> the equality check comes up false, you don't have an intersection   
+
+
+	--> ** the solution for this was beautiful **

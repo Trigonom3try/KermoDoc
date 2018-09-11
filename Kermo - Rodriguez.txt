@@ -1,0 +1,2 @@
+vrot = v*cos(theta) + (k x v)sin(theta) + k(k * v)(1 - cos(theta))
+

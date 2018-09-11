@@ -1,0 +1,33 @@
+POLYGON CREATION - TRIANGLES
+
+	n = (p1 - p0) x (p2 - p0)
+
+		--> n is the normal to the plane within which all the vertices of the triangle, arbitrarily stipulated
+	from input during its initialization, are coplanar. It is a necessary vector for describing the triangle's orientation
+	and for computing intersections with rays. In code, it is called the Znormal, and is one of three vectors describing
+	the triangle's basis : Xnormal, Ynormal, and Znormal
+
+		--> p0, p1, and p2 are position vectors to the vertices of the 
+	triangle, and the resultant vectors p1 - p0 and p2 - p0 (or p2 - p1) can
+	be seen as two sides of the triangle; for them to be coplanar, the normal
+	must be perpendicular to both vectors, and as such we can conveniently
+	use the cross product as the normal
+
+		--> p0 can be the origin of the polygon, or another origin point
+	separate from the vertices can be stipulated, so long as it is coplanar
+			--> it is much easier, however, to simply have one of the vertices be
+				the origin; so that's what we'll do *
+
+		--> Znormal is computed from the equation above; multiply by 1/|Znormal| for unit vector
+		--> Xnormal is p1 - p0 initially; multiply by 1/|Xnormal| for unit vector
+		--> Ynormal is the cross product of Z and X normals (will be unit automatically: 1*1*sin(90) = 1 )
+		
+		--> * next you are given the option to rotate the basis for the triangle about the Znormal,
+			without changing the absolute positions of the vertices (i.e. their coordinates relative
+			to the standard basis); this allows for the Xnormal to not have to be aligned to any
+			particular side of the triangle
+			--> this is important for aligning textures properly during texture mapping *
+
+
+
+
