@@ -1,5 +1,13 @@
 CAMERA MOVEMENT AND ROTATION
 
+-when the camera gets initialized, the origin gets set to the midpoint of the 
+	worldsize along each axis (~500000 ?),
+	and the normals get inited as follows:
+
+	-Xnormal = new Vector(1, AXIS.Xpos);
+	-Ynormal = new Vector(1, AXIS.Ypos);
+	-Znormal = new Vector(1, AXIS.Zpos);
+	
 --> remember that whenever the camera is rotated, it is always rotated about it's own
 	basis, and not around the axes :
 
@@ -9,23 +17,6 @@ Left / Right : the Znormal and Xnormal rotate around the Ynormal
 
 Clockwise / Counter-clockwise : the Xnormal and Ynormal rotate around the Znormal
 
-
-
--when the camera gets initialized, the origin gets set to the midpoint of the 
-	worldsize along each axis (~500000 ?),
-	and the normals get inited as follows:
-
-	-Xnormal = new Vector(1, AXIS.Xpos);
-	-Ynormal = new Vector(1, AXIS.Ypos);
-	-Znormal = new Vector(1, AXIS.Zpos);
-
-
--when the camera gets updated (i.e. all the rays get cast), you init the first ray
-	as a line with origin as the camera's origin, and slope as a vector with
-	angles equal to those of the camera's Znormal
-	--> then, you rotate the ray about the camera's Xnormal, by
-		Vert_FoV/2 degrees. Then, you rotate it about the camera's
-	Ynormal by Hor_FoV/2 degrees. Then you do the casting loop
 
 -moving the camera forward is of course equivalent to adding the components of its
 	Znormal (converted to ints) to its origin coordinates
