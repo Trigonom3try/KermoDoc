@@ -3,24 +3,22 @@ ABOUT THE KERMO
 The Kermo is a complete software engine for faithfully rendering to the screen mostly geometric images in an R^3
 Cartesian space, from any given angle and orientation.
 In other words, it's a 3D graphics engine emulator, which I conceived and wrote entirely from scratch in Java. 
-The Kermo implements ray-tracing, texture mapping, lighting, animation, phyics, and game logic.
+The Kermo implements ray-tracing.
 
 1. SOME HISTORY (You can skip this part)
 
 
 I started writing code for the Kermo about 2 years ago, before I knew any Precalculus (which is to say, long after I'd forgotten 
-virtually all the math I learned in high school); also, for the record, I could have finished and gotten the app
+virtually all the math I learned in high school); I thought that I could have finished and gotten the app
 working without systematically studying any linear algebra, simply by translittering into code some of the math like
 the Rodriguez algorithm which I couldn't prove and simply had to pull from online, but I finished Ron Larson's 
 Elementary Linear Algebra 8th Edition in a couple of weeks anyway because I wanted to understand why things like rotation matrices 
-did what they were purported to do.
+did what they were purported to do. This of course turned out not to be the case, and even if there were a way to implement the ray-casting loop using only vector-about-vector rotations, it would have been excruciatingly slow, inelegant, and without the facility to implement texture mapping. ( See : Kermo - Ray Casting.txt )
  
-In fact, it was very important to me throughout the project to prove as much as I could
-on my own, to study as little as possible, to not look at the book on graphics I had or look at the Quake engine in Visual
-Studio or at online graphics engines, or read about graphics on Wikipedia, or look at anything that any other programmer
-had written; but instead to get as much code working as possible from what little information that I already had 
+It was very important to me throughout the project to prove as much as I could on my own, to study as little as possible, to not look at the book on graphics I had or look at the Quake engine in Visual Studio or at online graphics engines, or read about graphics on Wikipedia, or look at anything that any other programmer
+had written (or even really talk to other programmers, but I'm done with that way of being now).  Instead, I wanted to get as much code working as possible from what little information that I already had 
 (I got simple rotations of vectors and triangles about the axes to work using only trigonometry, which I'm weirdly proud of;
-See VectorsLinesTriangles_TRIG.java, which is as far as I got before cracking down on linear algebra).
+See VectorsLinesTriangles.java, which is as far as I got before cracking down on linear algebra).
 
 I have not been affiliated with any school or professional program (I've also been homeless for the past 10 months).
  
@@ -52,10 +50,7 @@ overdetermined), I went online and learned about the vector forms of the line an
 calculus even though my own calculus barely extended beyond the limit and the derivative, and was thereby able to find the 
 intersection logic for a line and a plane with relative ease. The same thing happened for the Law of Cosines (math which I never 
 thought I'd need) and the withinVertices logic for ray-polygon intersection (See : WithinVerticesTest.java); my point is that I'd 
-always try to reason through the 
-problems on my own, and if I realized that there was math I needed and didn't have (and didn't have time to prove or discover on my 
-own without starving to death while doing so; we really owe much to the sacrifice and back-breaking work done by generations of 
-mathematicians to flesh out these wonderful systems), then I'd go online or into books and learn it. 
+always try to reason through the problems on my own, and if I realized that there was math I needed and didn't have (and didn't have time to prove or discover on my own without starving to death while doing so; we really owe much to the sacrifice and back-breaking work done by generations of mathematicians to flesh out these wonderful systems), then I'd go online or into books and learn it. 
 
 Also, you don't really need to worry about being fast at arithmetic since the only arithmetic you'll be doing will be 
 in the context of plugging things into your equations and finding results (which itself is often only in the context of debugging,
@@ -78,18 +73,14 @@ how easy creating a DOOM-clone would be given what I already knew, I started wri
 an actual 3D rendering system. (See : DOOM18 - About.txt , DOOM18.java)
 
 There's one last thing I'd like to touch upon before continuing my discussion of Kermo proper. 
-Late in the night of 8/17, I started rewriting both KermoEngine3D and DOOM18, separating everything into classes with public and 
+Late one night, I started rewriting both KermoEngine3D and DOOM18, separating everything into classes with public and 
 private methods and data, not having everything be static. I was able to 
 express much of what I'd learned theretofore by rewriting things like the Vector and Camera classes from memory, and refined my 
 methods and thinking by for example calling what I'd called "Sprites" and "Textures" instead "Images". 
 I also started thinking about some of the other things I'd need, like 
-Items and Guns and Animator objects, while putting many of my math methods into a Methods class and the GUI into Main.  
-I started
-to see how you can pull different discrete objects, each themselves tools and simple machines, together into a coherent software machine,
-working with each independently while also building up the whole interdependent system; what that feels like, how easy and exciting 
-that can be. 
-This marked the change from Stage 0 to Stage 1 of the development of Kermo and DOOM18 (hence the package names, KermoEvolution vs
-Kermo_dev_1 ) and perhaps the next level of my programming experience.
+Items and Guns and Animator objects, while putting many of my math methods into a Methods class and separating out my GUI classes, putting some elements into Main.  
+I started to see how you can pull different discrete objects, each themselves tools and simple machines, together into a coherent software machine, working with and fine-tuning each independently while also building up the whole interdependent system; what that feels like, how easy and exciting that can be. 
+This marked the change from Stage 0 to Stage 1 of the development of Kermo and DOOM18, and perhaps the next level of my programming experience.
 
 I also began to really see from doing this that KermoEngine3D and DOOM18 are in many ways essentially the same app, with one 
 simply extended from R^2 to R^3, and each having a small set of provisions and quirks pertaining to the dimension of their 
@@ -97,7 +88,7 @@ vector space. DOOM18 has some esoteric logic, particularly for how the camera em
 somewhat even more complex and less elegant of an app than the fully 3D rendering system.
 
 That the findIntersection logic for a line and a plane in 3D, and two lines in 2D, is in fact identical to the very 
-letter of code, served greatly to reinforce this understanding.
+letter of code, served greatly to reinforce this understanding ( See : DOOM18 - Line Intersection in 2D.txt, Kermo - Intersection of a Line and a Plane.txt).
 
 Now: What I did start with, when I endeavored to start writing a graphics engine from scratch so long ago, aside from the Java I'd 
 learned from taking 2 introductory compsci courses at Harvard Extension (Dr. Henry Leitner), a belief in the beauty and power of 
@@ -108,12 +99,10 @@ possible), were 2 basic ideas ...
 
 2. THE FIRST IDEA : RASTER RENDERING
 
-“A pixel is not a little square!” —Alvy Ray Smith 
+Â“A pixel is not a little square!Â” Â—Alvy Ray Smith 
 
 The first idea was that of the raster-display, the rectangular array of tiny triplets of LED's called pixels. Each sub-pixel is
-tinted either red, blue, or green and emits a light the intensity of which is an analog of a signal received 
-from the controller of the monitor/phone/tv/watch/any device with an LED display, which signal is converted from a digitally-encoded 
-number. The device stores the 3 values for each pixel in memory, usually allotting 8 bits for each (Java in particular supports 
+tinted either red, blue, or green and emits a light the intensity of which is an analog of a signal that is converted from a digitally ecnoded number sent across a bus from the controller of the monitor/phone/tv/watch/any device with an LED display. The device stores the 3 values for each pixel in memory, usually allotting 8 bits for each (Java in particular supports 
 8-bit color values, from 0-255 which is 2^8 or 256 possible values; 256^3 = 16.8 million possible color combinations), and each 
 24bit color number is stored in a rectangular array in memory, indexed corresponding to the X and Y position of the pixel to be 
 colored. Each number is then accessed sequencially within the array, sent across a bus to the pixel in question, and converted into 
@@ -121,8 +110,7 @@ an analog voltage that is sent through the LED, burning the material within and 
 illuminating the pixel to a brightness that is an analog of the input voltage. I don't know many of the specifics of the process as 
 I'm not an electrical engineer or even really a hardware guy at all, but this is a generally accurate picture of what's going on. 
 
-Now that was a lot of words to describe a simple process, and I didn't necessarily know all of that starting out but I did 
-understand the following: the computer draws images by coloring pixels in a 2d array, from a 2d array of values in memory. *
+I didn't necessarily know all of that starting out but I did understand the following: the computer draws images by coloring pixels in a 2d array, from a 2d array of values in memory. *
 
 So, using arrays and the Java swing package, I overloaded the paintComponent method for a JPanel that would serve as a display
 (sort of like a tv screen or monitor emulator), in the following manner:
@@ -144,8 +132,6 @@ So, using arrays and the Java swing package, I overloaded the paintComponent met
 	}
 
 See : Display.java
-
-I would end up using this quintessential solution for a lot of different 2D apps in Java.
 
 
 
@@ -176,11 +162,7 @@ static class World
 
 As you can see, I used a for-loop as a sort of raster-initializer for the World object, proceeding along each slot along the
 Z, Y, and X axes and populating the world with a Point at each position (fun fact: I used to be obsessed, like seriously obsessed
-with for-loops *). 
-So, what's wrong with the World class? Well, in order for the world to be big enough, which is to say have enough coordinate values
-within it to enable a high precision of computation and thus a highly detailed world, there needed to be on the order of 1000s,
-10s of thousands or more, points along each axis; in fact, I had initially planned for there to be 1million^3 points within the
-world. Let's do the math: each point object has as its data fields 3 integers for X,Y, and Z, and a Color value (not to mention
+with for-loops *). So, what's wrong with the World class? Well, in order for the world to be big enough, which is to say have enough coordinate values within it to enable a high precision of computation and thus a highly detailed world, there needed to be on the order of 1000s, 10s of thousands or more, points along each axis; in fact, I had initially planned for there to be 1million^3 points within the world. Let's do the math: each point object has as its data fields 3 integers for X,Y, and Z, and a Color value (not to mention
 potentially other fields such as for example a double value distanceFromOrigin representing the distance of the point from the 
 Camera origin, which would be a hugely important value to keep track of, or things like links to polygons if it were a vertex of
 a polygon; I ended up making a Vertex class that extended the Point class, but that was later). Each int has 4bytes, and each
